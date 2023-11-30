@@ -55,9 +55,6 @@ $imageCache = new Cache(new Filesystem('/path/to/images'));
 $videoCache = new Cache(new Filesystem('/path/to/videos'));
 ```
 
-> [!NOTE]
-> The `$cacheInstance->clear()` method will only work for the instance in which it was called.
-
 ## Cache
 
 By default, cache created with Filesystem driver under hood.
@@ -165,6 +162,9 @@ $cache->has('baz'); // false
 ### clear()
 
 Wipes all cache.
+
+> [!NOTE]
+> The `$cacheInstance->clear()` method will only work for the instance in which it was called.
 
 ```php
 $cache->set('foo1', 'bar1')->has('foo1'); // true
