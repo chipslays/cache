@@ -11,7 +11,7 @@ use Traversable;
 /**
  * Native serializer uses the functions `serialize()` and `unserialize()`.
  */
-class NativeSerialize implements SerializerInterface
+class NativeSerializer extends Serializer
 {
     /**
      * @inheritDoc
@@ -32,33 +32,33 @@ class NativeSerialize implements SerializerInterface
     }
 
     /**
-     * @param mixed $var
-     * @return boolean
+     * @param mixed $variable
+     * @return bool
      */
-    protected function isIterable(mixed $var): bool
+    protected function isIterable(mixed $variable): bool
     {
-        return is_array($var) || (is_object($var) && ($var instanceof Traversable));
+        return is_array($variable) || (is_object($variable) && ($variable instanceof Traversable));
     }
 
     /**
-     * @param mixed $var
-     * @param boolean $iterate
-     * @return boolean
+     * @param mixed $variable
+     * @param bool $iterate
+     * @return bool
      */
-    protected function isSerializable(mixed $var, bool $iterate = true): bool
+    protected function isSerializable(mixed $variable, bool $iterate = true): bool
     {
-        if (is_resource($var)) {
+        if (is_resource($variable)) {
             return false;
-        } else if (is_object($var)) {
-            if ($var instanceof Closure) {
+        } else if (is_object($variable)) {
+            if ($variable instanceof Closure) {
                 return false;
-            } else if (!$var instanceof Serializable && !$var instanceof ArrayAccess) {
+            } else if (!$variable instanceof Serializable && !$variable instanceof ArrayAccess) {
                 return false;
             }
         }
 
-        if ($iterate && $this->isIterable($var)) {
-            foreach ($var as $value) {
+        if ($iterate && $this->isIterable($variable)) {
+            foreach ($variable as $value) {
                 if (!$this->isSerializable($value, true)) {
                     return false;
                 }
@@ -78,7 +78,10 @@ class NativeSerialize implements SerializerInterface
     {
         if (!$this->isSerializable($value)) {
             $type = is_object($value) ? get_class($value) : gettype($value);
-            throw new SerializerException('Cannot serialize value of type: ' . $type);
+
+            throw new SerializerException(
+                'Cannot serialize value of type: ' . $type
+            );
         }
     }
 }

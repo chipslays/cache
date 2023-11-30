@@ -2,12 +2,10 @@
 
 namespace Please\Cache\Drivers;
 
-use Closure;
-use Please\Cache\Drivers\DriverInterface;
 use Please\Cache\Exceptions\DriverException;
 use FilesystemIterator;
 
-class Filesystem implements DriverInterface
+class Filesystem extends AbstractDriver
 {
     private FilesystemIterator $filesystemIterator;
 
@@ -48,15 +46,11 @@ class Filesystem implements DriverInterface
                 @flock($fp, LOCK_UN);
                 @fclose($fp);
 
-                return $cacheValue !== false ? $cacheValue : (
-                    $default instanceof Closure
-                        ? call_user_func($default)
-                        : $default
-                );
+                return $cacheValue !== false ? $cacheValue : $this->handleDefaultValue($default);
             }
         }
 
-        return $default instanceof Closure ? call_user_func($default) : $default;
+        return $this->handleDefaultValue($default);
     }
 
     /**
@@ -89,9 +83,7 @@ class Filesystem implements DriverInterface
     {
         $this->gc();
 
-        if (is_string($ttl)) {
-            $ttl = strtotime($ttl) - time();
-        }
+        $ttl = $this->covertTtlToSeconds($ttl);
 
         $cacheFile = $this->getFilePath($key);
 
@@ -125,6 +117,7 @@ class Filesystem implements DriverInterface
             if ($file->isDir() || strpos($file->getFilename(), $this->prefix ?? '') === false) {
                 continue;
             }
+
             if ($file->getMTime() < $time) {
                 @unlink($file->getRealPath());
             }
@@ -157,7 +150,7 @@ class Filesystem implements DriverInterface
     /**
      * @inheritDoc
      */
-    public function delete($key): self
+    public function delete(string $key): self
     {
         @unlink($this->getFilePath($key));
 

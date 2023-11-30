@@ -1,25 +1,17 @@
 <?php
 
 use Please\Cache\Cache;
-use Please\Cache\Drivers\Filesystem;
+use Please\Cache\Drivers\Session;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// provide arguments
-$driver = new Filesystem(
-    folder: __DIR__ . '/cache',
-    prefix: 'cached_',
-    extension: '.bin',
-);
-
-// or use simple as
-$cache = new Cache(new Filesystem);
+$cache = new Cache(new Session);
 
 $cache->set('foo', 'bar', 1);
 
 dump($cache->get('foo')); // bar
 
-sleep(3);
+sleep(2);
 
 dump($cache->get('foo', 'baz')); // baz
 

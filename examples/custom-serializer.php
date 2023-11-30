@@ -1,11 +1,11 @@
 <?php
 
 use Please\Cache\Cache;
-use Please\Cache\Serializers\NativeSerialize;
+use Please\Cache\Serializers\NativeSerializer;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-class JsonSerializer extends NativeSerialize
+class JsonSerializer extends NativeSerializer
 {
     public function serialize(mixed $value): string
     {

@@ -2,15 +2,18 @@
 
 namespace Please\Cache\Serializers;
 
-interface SerializerInterface
+class Serializer
 {
     /**
      * Serialize cache value.
      *
      * @param mixed $value
-     * @return string
+     * @return mixed
      */
-    public function serialize(mixed $value): string;
+    public function serialize(mixed $value): mixed
+    {
+        return $value;
+    }
 
     /**
      * Unserialize cache value.
@@ -18,5 +21,8 @@ interface SerializerInterface
      * @param string $value
      * @return mixed
      */
-    public function unserialize(string $value): mixed;
+    public function unserialize(string $value): mixed
+    {
+        return $value;
+    }
 }

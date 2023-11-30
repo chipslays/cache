@@ -45,19 +45,21 @@ $driver = new Filesystem(
 $cache = new Cache($driver);
 ```
 
-You can create as many Cache instances as you need.
+### Memory
+
+This driver uses the memory to store the cache.
+
+> [!WARNING]
+> After the script completes the memory will be cleared.
 
 ```php
 use Please\Cache\Cache;
-use Please\Cache\Drivers\Filesystem;
+use Please\Cache\Drivers\Memory;
 
-$imageCache = new Cache(new Filesystem('/path/to/images'));
-$videoCache = new Cache(new Filesystem('/path/to/videos'));
+$cache = new Cache(new Memory);
 ```
 
-## Cache
-
-By default, cache created with Filesystem driver under hood.
+By default, cache created with Memory driver under hood.
 
 ```php
 use Please\Cache\Cache;
@@ -65,13 +67,37 @@ use Please\Cache\Cache;
 $cache = new Cache;
 ```
 
-You can pass one of the available drivers.
+### Session
+
+This driver uses the `$_SESSION` to store the cache.
 
 ```php
 use Please\Cache\Cache;
+use Please\Cache\Drivers\Session;
+
+$cache = new Cache(new Session);
+```
+
+You can pass the key in which the cache will be stored.
+
+```php
+use Please\Cache\Cache;
+use Please\Cache\Drivers\Session;
+
+$cache = new Cache(new Session('api_cache'));
+```
+
+## Cache
+
+You can create as many Cache instances as you need.
+
+```php
+use Please\Cache\Cache;
+use Please\Cache\Drivers\Session;
 use Please\Cache\Drivers\Filesystem;
 
-$cache = new Cache(new Filesystem);
+$videoCache = new Cache(new Session('your unique key'));
+$imageCache = new Cache(new Filesystem('/path/to/images'));
 ```
 
 By default, for serialization uses native PHP functions `serialize()` and `unserialize()`.
@@ -81,7 +107,7 @@ You can create and pass a custom serializer for example, for serializing closure
 ```php
 use Please\Cache\Cache;
 
-class JsonSerializer extends NativeSerialize
+class JsonSerializer extends NativeSerializer
 {
     public function serialize(mixed $value): string
     {

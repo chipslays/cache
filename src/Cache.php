@@ -2,23 +2,26 @@
 
 namespace Please\Cache;
 
-use Please\Cache\Drivers\Filesystem;
+use Please\Cache\Drivers\AbstractDriver;
 use Please\Cache\Drivers\DriverInterface;
-use Please\Cache\Serializers\NativeSerialize;
-use Please\Cache\Serializers\SerializerInterface;
+use Please\Cache\Drivers\Memory;
+use Please\Cache\Serializers\Serializer;
+use Please\Cache\Serializers\NativeSerializer;
 
 class Cache implements DriverInterface
 {
     /**
      * Constructor.
      *
-     * @param DriverInterface|null $driver
+     * @param AbstractDriver|null $driver
      */
     public function __construct(
-        protected ?DriverInterface $driver = new Filesystem,
-        protected SerializerInterface $serializer = new NativeSerialize,
+        protected ?AbstractDriver $driver = new Memory,
+        protected Serializer $serializer = new NativeSerializer,
     ) {
-        //
+        if ($serializer = $this->driver->getOverriddenSerializer()) {
+            $this->serializer = $this->driver->getOverriddenSerializer();
+        }
     }
 
     /**
