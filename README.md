@@ -56,7 +56,6 @@ $videoCache = new Cache(new Filesystem('/path/to/videos'));
 ```
 
 > **NOTE**
->
 > The `$cacheInstance->clear()` method will only work for the instance in which it was called.
 
 ## Cache
