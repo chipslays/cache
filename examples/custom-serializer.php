@@ -1,6 +1,7 @@
 <?php
 
 use Please\Cache\Cache;
+use Please\Cache\Drivers\Filesystem;
 use Please\Cache\Serializers\NativeSerializer;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -20,7 +21,7 @@ class JsonSerializer extends NativeSerializer
     }
 }
 
-$cache = new Cache(serializer: new JsonSerializer);
+$cache = new Cache(new Filesystem, new JsonSerializer);
 
 $cache->set('foo', ['bar', 'baz']);
 

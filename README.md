@@ -33,6 +33,8 @@ use Please\Cache\Drivers\Filesystem;
 $cache = new Cache(new Filesystem);
 ```
 
+You can provide a specific parameters.
+
 ```php
 use Please\Cache\Cache;
 use Please\Cache\Drivers\Filesystem;
@@ -112,6 +114,8 @@ You can create and pass a custom serializer for example, for serializing closure
 
 ```php
 use Please\Cache\Cache;
+use Please\Cache\Drivers\Filesystem;
+use Please\Cache\Serializers\NativeSerializer;
 
 class JsonSerializer extends NativeSerializer
 {
@@ -128,7 +132,7 @@ class JsonSerializer extends NativeSerializer
     }
 }
 
-$cache = new Cache(serializer: new JsonSerializer);
+$cache = new Cache(new Filesystem, new JsonSerializer);
 ```
 
 ## Methods
