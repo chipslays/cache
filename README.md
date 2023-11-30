@@ -14,7 +14,13 @@ You can find usage examples [here](/examples).
 
 ## Drivers
 
-Currently there is only a `Filesystem` driver, more drivers will be added soon.
+Available drivers:
+- [Filesystem](#filesystem)
+  - This driver uses the file system to store the cache.
+- [Memory](#memory)
+  - This driver uses the memory to store the cache.
+- [Session](#session)
+  - This driver uses the `$_SESSION` to store the cache.
 
 ### Filesystem
 
