@@ -42,6 +42,11 @@ class ClosureHash
                 $file->next();
             }
 
+            // dd(array(
+            //     $content,
+            //     $ref->getStaticVariables()
+            // ));
+
             $hash = md5(json_encode(array(
                 $content,
                 $ref->getStaticVariables()
