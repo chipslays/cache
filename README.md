@@ -110,7 +110,7 @@ $imageCache = new Cache(new Filesystem('/path/to/images'));
 
 By default, for serialization uses native PHP functions `serialize()` and `unserialize()`.
 
-You can create and pass a custom serializer for example, for serializing closures, classes, etc.
+You can create and pass your own serializer if you need to, for example to serialize closures, classes, etc.
 
 ```php
 use Please\Cache\Cache;
@@ -157,7 +157,7 @@ You can pass the TTL value as a string like for the `strtotime() ` function.
 $cache->set('foo', ['bar', 'baz'], '1 day');
 
 // the example above is equivalent to this code
-$ttl = strtotime($ttl) - time();
+$ttl = strtotime('1 year') - time();
 $cache->set('foo', 'bar', $ttl);
 ```
 
