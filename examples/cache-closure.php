@@ -6,9 +6,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $cache = new Cache;
 
-$closure = function () {
-    return mt_rand();
-};
+$closure = fn (): int => mt_rand();
 
 echo $cache->through($closure) . PHP_EOL;
 echo $cache->through($closure) . PHP_EOL;
