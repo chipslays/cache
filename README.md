@@ -65,6 +65,7 @@ use Please\Cache\Cache;
 use Please\Cache\Drivers\Memory;
 
 $cache = new Cache(new Memory);
+$anotherCacheInstance = new Cache(new Memory);
 ```
 
 By default, cache created with Memory driver under hood.
@@ -92,7 +93,8 @@ You can pass the key in which the cache will be stored.
 use Please\Cache\Cache;
 use Please\Cache\Drivers\Session;
 
-$cache = new Cache(new Session('api_cache'));
+$apiCache = new Cache(new Session('_api'));
+$imageCache = new Cache(new Session('_images'));
 ```
 
 ## Cache
