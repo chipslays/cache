@@ -128,7 +128,7 @@ class JsonSerializer extends NativeSerializer
         return json_encode($value);
     }
 
-    public function unserialize(string $value): mixed
+    public function unserialize(mixed $value): mixed
     {
         return json_decode($value, true);
     }
@@ -228,6 +228,46 @@ $cache->set('foo', 'bar')->has('foo'); // true
 $cache->delete('foo');
 
 $cache->has('foo'); // false
+```
+
+### pluck()
+
+Removes and returns an item from the cache by its key.
+
+Parameter | Required | Default
+--- | --- | ---
+`string $key` | `true` |
+`mixed $default` | `false` | `null`
+
+```php
+$cache->set('foo', 'bar')->has('foo'); // true
+
+$cache->pluck('foo'); // bar
+
+$cache->has('foo'); // false
+```
+
+### through()
+
+If the closure is not cached, then executes it, otherwise returns the cached result of closure execution.
+
+This method used [`ClosureHash`](/src/Support/ClosureHash.php) under hood.
+
+> [!NOTE]
+> The closure must return a value suitable for serialization by the [serializer](/src/Serializers/) you choose.
+
+Parameter | Required | Default
+--- | --- | ---
+`string $callback` | `true` |
+`int\|string $ttl` | `false` | `1 year`
+
+```php
+$closure = function () {
+    return mt_rand();
+};
+
+$cache->through($closure);
+$cache->through($closure); // returns cached result of closure execution
 ```
 
 ## License

@@ -18,10 +18,10 @@ class Serializer
     /**
      * Unserialize cache value.
      *
-     * @param string $value
+     * @param mixed $value
      * @return mixed
      */
-    public function unserialize(string $value): mixed
+    public function unserialize(mixed $value): mixed
     {
         return $value;
     }

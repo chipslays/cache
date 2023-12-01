@@ -15,7 +15,7 @@ class JsonSerializer extends NativeSerializer
         return json_encode($value);
     }
 
-    public function unserialize(string $value): mixed
+    public function unserialize(mixed $value): mixed
     {
         return json_decode($value, true);
     }

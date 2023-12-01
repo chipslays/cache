@@ -2,11 +2,13 @@
 
 namespace Please\Cache;
 
+use Closure;
 use Please\Cache\Drivers\AbstractDriver;
 use Please\Cache\Drivers\DriverInterface;
 use Please\Cache\Drivers\Memory;
 use Please\Cache\Serializers\Serializer;
 use Please\Cache\Serializers\NativeSerializer;
+use Please\Cache\Support\ClosureHash;
 
 class Cache implements DriverInterface
 {
@@ -74,6 +76,46 @@ class Cache implements DriverInterface
         $this->driver->delete($key);
 
         return $this;
+    }
+
+    /**
+     * Removes and returns an item from the cache by its key.
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function pluck(string $key, mixed $default = null): mixed
+    {
+        $value = $this->get($key, $default);
+
+        $this->driver->delete($key);
+
+        return $value;
+    }
+
+    /**
+     * If the closure is not cached, then executes it,
+     * otherwise returns the cached result of executing
+     * the closure.
+     *
+     * @param Closure $closure
+     * @param int|string $ttl
+     * @return mixed
+     */
+    public function through(Closure $closure, int|string $ttl = '1 year'): mixed
+    {
+        $hash = 'hashed_closure_' . ClosureHash::make($closure);
+
+        if ($value = $this->get($hash)) {
+            return $value;
+        }
+
+        $value = call_user_func($closure);
+
+        $this->set($hash, $value, $ttl);
+
+        return $value;
     }
 }
 

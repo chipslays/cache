@@ -26,7 +26,7 @@ class NativeSerializer extends Serializer
     /**
      * @inheritDoc
      */
-    public function unserialize(string $value): mixed
+    public function unserialize(mixed $value): mixed
     {
         return @unserialize($value);
     }
