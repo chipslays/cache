@@ -159,7 +159,7 @@ You can pass the TTL value as a string like for the `strtotime() ` function.
 $cache->set('foo', ['bar', 'baz'], '1 day');
 
 // the example above is equivalent to this code
-$ttl = strtotime('1 year') - time();
+$ttl = strtotime('1 day') - time();
 $cache->set('foo', 'bar', $ttl);
 ```
 
