@@ -2,6 +2,10 @@
 
 A simple and primitive library for caching values for PHP >8.1.
 
+<p align="center">
+    <img src="/.github/static/hero.png">
+</p>
+
 ## Installation
 
 ```bash
