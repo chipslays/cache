@@ -2,13 +2,13 @@
 
 namespace Please\Cache;
 
-use Closure;
 use Please\Cache\Drivers\AbstractDriver;
 use Please\Cache\Drivers\DriverInterface;
 use Please\Cache\Drivers\Memory;
 use Please\Cache\Serializers\Serializer;
 use Please\Cache\Serializers\NativeSerializer;
 use Please\Cache\Support\ClosureHash;
+use Closure;
 
 class Cache implements DriverInterface
 {
