@@ -7,6 +7,7 @@ use Please\Cache\Exceptions\SerializerException;
 use Closure;
 use ArrayAccess;
 use Serializable;
+use stdClass;
 use Traversable;
 
 /**
@@ -53,6 +54,8 @@ class NativeSerializer implements Serializer
         } else if (is_object($variable)) {
             if ($variable instanceof Closure) {
                 return false;
+            } else if ($variable instanceof stdClass) {
+                return true;
             } else if (!$variable instanceof Serializable && !$variable instanceof ArrayAccess) {
                 return false;
             }
