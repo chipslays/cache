@@ -2,15 +2,15 @@
 
 namespace Please\Cache;
 
-use Please\Cache\Drivers\AbstractDriver;
-use Please\Cache\Drivers\DriverInterface;
 use Please\Cache\Drivers\Memory;
-use Please\Cache\Serializers\Serializer;
+use Please\Cache\Drivers\AbstractDriver;
+use Please\Cache\Drivers\Contracts\Driver;
 use Please\Cache\Serializers\NativeSerializer;
+use Please\Cache\Serializers\Contracts\Serializer;
 use Please\Cache\Support\ClosureHash;
 use Closure;
 
-class Cache implements DriverInterface
+class Cache implements Driver
 {
     /**
      * Constructor.
@@ -19,11 +19,11 @@ class Cache implements DriverInterface
      */
     public function __construct(
         protected ?AbstractDriver $driver = new Memory,
-        protected Serializer $serializer = new NativeSerializer,
+        protected ?Serializer $serializer = null,
     ) {
-        if ($serializer = $this->driver->getOverriddenSerializer()) {
-            $this->serializer = $this->driver->getOverriddenSerializer();
-        }
+        $this->serializer = $this->driver->getSerializer()
+            ?? $this->serializer
+            ?? new NativeSerializer;
     }
 
     /**
@@ -41,8 +41,12 @@ class Cache implements DriverInterface
     /**
      * @inheritDoc
      */
-    public function set(string $key, mixed $value, int|string $ttl = '1 year'): self
+    public function set(string $key, mixed $value, string|int|null $ttl = null): self
     {
+        if ($value instanceof Closure) {
+            $value = $value();
+        }
+
         $serializedValue = $this->serializer->serialize($value);
 
         $this->driver->set($key, $serializedValue, $ttl);
@@ -71,9 +75,9 @@ class Cache implements DriverInterface
     /**
      * @inheritDoc
      */
-    public function delete(string $key): self
+    public function forget(string $key): self
     {
-        $this->driver->delete($key);
+        $this->driver->forget($key);
 
         return $this;
     }
@@ -89,7 +93,7 @@ class Cache implements DriverInterface
     {
         $value = $this->get($key, $default);
 
-        $this->driver->delete($key);
+        $this->driver->forget($key);
 
         return $value;
     }
@@ -103,7 +107,7 @@ class Cache implements DriverInterface
      * @param int|string $ttl
      * @return mixed
      */
-    public function through(Closure $closure, int|string $ttl = '1 year'): mixed
+    public function through(Closure $closure, string|int|null $ttl = null): mixed
     {
         $hash = 'hashed_closure_' . ClosureHash::make($closure);
 

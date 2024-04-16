@@ -20,7 +20,7 @@ $cache->set('foo', 'bar', '1 hour');
 
 dump($cache->has('foo')); // true
 
-$cache->delete('foo');
+$cache->forget('foo');
 
 dump($cache->has('foo')); // false
 

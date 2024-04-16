@@ -2,6 +2,7 @@
 
 namespace Please\Cache\Serializers;
 
+use Please\Cache\Serializers\Contracts\Serializer;
 use Please\Cache\Exceptions\SerializerException;
 use Closure;
 use ArrayAccess;
@@ -11,7 +12,7 @@ use Traversable;
 /**
  * Native serializer uses the functions `serialize()` and `unserialize()`.
  */
-class NativeSerializer extends Serializer
+class NativeSerializer implements Serializer
 {
     /**
      * @inheritDoc

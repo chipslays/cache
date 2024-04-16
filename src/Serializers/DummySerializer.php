@@ -2,13 +2,12 @@
 
 namespace Please\Cache\Serializers;
 
-class Serializer
+use Please\Cache\Serializers\Contracts\Serializer;
+
+class DummySerializer implements Serializer
 {
     /**
-     * Serialize cache value.
-     *
-     * @param mixed $value
-     * @return mixed
+     * @inheritDoc
      */
     public function serialize(mixed $value): mixed
     {
@@ -16,10 +15,7 @@ class Serializer
     }
 
     /**
-     * Unserialize cache value.
-     *
-     * @param mixed $value
-     * @return mixed
+     * @inheritDoc
      */
     public function unserialize(mixed $value): mixed
     {

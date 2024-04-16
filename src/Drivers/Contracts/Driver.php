@@ -1,8 +1,8 @@
 <?php
 
-namespace Please\Cache\Drivers;
+namespace Please\Cache\Drivers\Contracts;
 
-interface DriverInterface
+interface Driver
 {
     /**
      * Fetches a value from the cache.
@@ -23,7 +23,7 @@ interface DriverInterface
      *
      * @return self
      */
-    public function set(string $key, mixed $value, int|string $ttl = '1 year'): self;
+    public function set(string $key, mixed $value, string|int|null $ttl = null): self;
 
     /**
      * Determines whether an item is present in the cache.
@@ -47,5 +47,5 @@ interface DriverInterface
      * @param string $key
      * @return self
      */
-    public function delete(string $key): self;
+    public function forget(string $key): self;
 }

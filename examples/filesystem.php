@@ -5,15 +5,12 @@ use Please\Cache\Drivers\Filesystem;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// provide arguments
 $driver = new Filesystem(
     folder: __DIR__ . '/cache',
-    prefix: 'cached_',
-    extension: '.bin',
+    prefix: 'cache'
 );
 
-// or use simple as
-$cache = new Cache(new Filesystem);
+$cache = new Cache($driver);
 
 $cache->set('foo', 'bar', 1);
 
@@ -28,7 +25,7 @@ $cache->set('foo', 'bar', '1 hour');
 
 dump($cache->has('foo')); // true
 
-$cache->delete('foo');
+$cache->forget('foo');
 
 dump($cache->has('foo')); // false
 
@@ -36,6 +33,12 @@ dump($cache->has('foo')); // false
 $cache->set('foo1', 'bar1', '24 hours');
 $cache->set('foo2', 'bar2', '24 hours');
 $cache->set('foo3', 'bar3', '24 hours');
+
+dump(
+    $cache->has('foo1'), // true
+    $cache->has('foo2'), // true
+    $cache->has('foo3'), // true
+);
 
 $cache->clear();
 

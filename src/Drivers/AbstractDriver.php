@@ -2,10 +2,11 @@
 
 namespace Please\Cache\Drivers;
 
+use Please\Cache\Drivers\Contracts\Driver;
+use Please\Cache\Serializers\Contracts\Serializer;
 use Closure;
-use Please\Cache\Serializers\Serializer;
 
-abstract class AbstractDriver implements DriverInterface
+abstract class AbstractDriver implements Driver
 {
     /**
      * @param mixed $defaultValue
@@ -19,12 +20,12 @@ abstract class AbstractDriver implements DriverInterface
     }
 
     /**
-     * Convert a string to seconds.
+     * Convert a ttl to seconds.
      *
-     * @param integer|string $ttl
-     * @return integer
+     * @param int|string $ttl
+     * @return int
      */
-    protected function covertTtlToSeconds(int|string $ttl): int
+    protected function ttlToSeconds(int|string $ttl): int
     {
         return is_string($ttl)
             ? strtotime($ttl) - time()
@@ -37,7 +38,7 @@ abstract class AbstractDriver implements DriverInterface
      *
      * @return Serializer|null
      */
-    public function getOverriddenSerializer(): ?Serializer
+    public function getSerializer(): ?Serializer
     {
         return null;
     }

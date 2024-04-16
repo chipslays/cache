@@ -15,14 +15,15 @@ sleep(2);
 
 dump($cache->get('foo', 'baz')); // baz
 
-die;
+$cache->set('baz', fn () => ['baz1', 'baz2'], 1);
+dump($cache->get('baz')); // ['baz1', 'baz2']
 
 // pass string like for strtotime() function
 $cache->set('foo', 'bar', '1 hour');
 
 dump($cache->has('foo')); // true
 
-$cache->delete('foo');
+$cache->forget('foo');
 
 dump($cache->has('foo')); // false
 

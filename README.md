@@ -35,6 +35,9 @@ use Please\Cache\Cache;
 use Please\Cache\Drivers\Filesystem;
 
 $cache = new Cache(new Filesystem);
+
+$cache->set('foo', 'bar');
+$cache->get('foo'); // bar
 ```
 
 You can provide a specific parameters.
@@ -43,18 +46,12 @@ You can provide a specific parameters.
 use Please\Cache\Cache;
 use Please\Cache\Drivers\Filesystem;
 
-$driver = new Filesystem(
-    // Where are cache files stored.
-    folder: '/path/to/folder',
-
-    // Prefix for cache file.
-    prefix: 'cached_',
-
-    // Extension for cache file.
-    extension: '.bin',
-);
+$driver = new Filesystem(folder: '/path/to/folder', prefix: 'data');
 
 $cache = new Cache($driver);
+
+$cache->set('foo', fn () => ['bar']);
+$cache->get('foo'); // ['bar']
 ```
 
 ### Memory
@@ -121,14 +118,12 @@ You can create and pass your own serializer if you need to, for example to seria
 ```php
 use Please\Cache\Cache;
 use Please\Cache\Drivers\Filesystem;
-use Please\Cache\Serializers\NativeSerializer;
+use Please\Cache\Serializers\Contracts\Serializer;
 
-class JsonSerializer extends NativeSerializer
+class JsonSerializer implements Serializer
 {
     public function serialize(mixed $value): string
     {
-        $this->throwExceptionIsNotSerializable($value);
-
         return json_encode($value);
     }
 
@@ -218,7 +213,7 @@ $cache->has('foo1'); // false
 $cache->has('foo2'); // false
 ```
 
-### delete()
+### forget()
 
 Delete cache by key.
 
@@ -229,7 +224,7 @@ Parameter | Required | Default
 ```php
 $cache->set('foo', 'bar')->has('foo'); // true
 
-$cache->delete('foo');
+$cache->forget('foo');
 
 $cache->has('foo'); // false
 ```

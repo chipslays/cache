@@ -2,7 +2,8 @@
 
 namespace Please\Cache\Drivers;
 
-use Please\Cache\Serializers\Serializer;
+use Please\Cache\Serializers\Contracts\Serializer;
+use Please\Cache\Serializers\DummySerializer;
 
 class Memory extends AbstractDriver
 {
@@ -29,9 +30,13 @@ class Memory extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function set(string $key, mixed $value, int|string $ttl = '1 year'): self
+    public function set(string $key, mixed $value, string|int|null $ttl = null): static
     {
-        $ttl = $this->covertTtlToSeconds($ttl) + time();
+        if ($ttl === null) {
+            return $this;
+        }
+
+        $ttl = $this->ttlToSeconds($ttl) + time();
 
         $this->items[$key] = compact('value', 'ttl');
 
@@ -55,7 +60,7 @@ class Memory extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function clear(): self
+    public function clear(): static
     {
         $this->items = [];
 
@@ -65,7 +70,7 @@ class Memory extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function delete(string $key): self
+    public function forget(string $key): static
     {
         unset($this->items[$key]);
 
@@ -75,8 +80,8 @@ class Memory extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function getOverriddenSerializer(): ?Serializer
+    public function getSerializer(): ?Serializer
     {
-        return new Serializer;
+        return new DummySerializer;
     }
 }

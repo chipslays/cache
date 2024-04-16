@@ -36,9 +36,13 @@ class Session extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function set(string $key, mixed $value, int|string $ttl = '1 year'): self
+    public function set(string $key, mixed $value, string|int|null $ttl = null): static
     {
-        $ttl = $this->covertTtlToSeconds($ttl) + time();
+        if ($ttl === null) {
+            return $this;
+        }
+
+        $ttl = $this->ttlToSeconds($ttl) + time();
 
         $_SESSION[$this->name][$key] = compact('value', 'ttl');
 
@@ -62,7 +66,7 @@ class Session extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function clear(): self
+    public function clear(): static
     {
         $_SESSION[$this->name] = [];
 
@@ -72,7 +76,7 @@ class Session extends AbstractDriver
     /**
      * @inheritDoc
      */
-    public function delete(string $key): self
+    public function forget(string $key): static
     {
         unset($_SESSION[$this->name][$key]);
 

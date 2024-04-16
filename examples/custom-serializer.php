@@ -2,16 +2,14 @@
 
 use Please\Cache\Cache;
 use Please\Cache\Drivers\Filesystem;
-use Please\Cache\Serializers\NativeSerializer;
+use Please\Cache\Serializers\Contracts\Serializer;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-class JsonSerializer extends NativeSerializer
+class JsonSerializer implements Serializer
 {
     public function serialize(mixed $value): string
     {
-        $this->throwExceptionIsNotSerializable($value);
-
         return json_encode($value);
     }
 
@@ -23,7 +21,7 @@ class JsonSerializer extends NativeSerializer
 
 $cache = new Cache(new Filesystem, new JsonSerializer);
 
-$cache->set('foo', ['bar', 'baz']);
+$cache->set('foo', ['bar', 'baz'], 3600);
 
 dump($cache->get('foo')); // [bar, baz]
 
